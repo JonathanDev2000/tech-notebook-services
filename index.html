@@ -4,7 +4,14 @@
     <meta name="google-site-verification" content="Yy221Vv9psqoERRkMnpIp_LCw2KnzBzaP_gG96wbVI4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Notebook Services - Manutenção Profissional de Notebooks</title>
+    <meta name="description" content="Tech Notebooks Services - Manutenção, limpeza e upgrades de notebooks. Buscamos na sua residência em Engenho de Dentro e região. Atendimento Zona Sul, Zona Norte, Barra da Tijuca e Tijuca.">
+    <meta name="keywords" content="notebook, manutenção, limpeza, upgrade SSD, RAM, Engenho de Dentro, Rio de Janeiro">
+    <meta property="og:title" content="Tech Notebooks Services - Manutenção e Upgrades de Notebooks">
+    <meta property="og:description" content="Serviço profissional de manutenção de notebooks com busca na residência do cliente. Atendemos Engenho de Dentro, Zona Sul, Zona Norte, Barra da Tijuca e Tijuca.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://technotebooks.com.br">
+    <title>Tech Notebooks Services - Manutenção e Upgrades | Engenho de Dentro, RJ</title>
+    
     <style>
         * {
             margin: 0;
@@ -15,6 +22,7 @@
         :root {
             --primary-color: #00a0d2;
             --secondary-color: #004d73;
+            --accent-color: #ffc107;
             --success-color: #28a745;
             --danger-color: #dc3545;
             --dark: #1a1a1a;
@@ -56,36 +64,23 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: var(--white);
+            text-decoration: none;
         }
 
         .logo-icon {
             font-size: 2rem;
         }
 
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
         nav a {
             color: var(--white);
             text-decoration: none;
             transition: color 0.3s;
-            cursor: pointer;
+            margin-left: 2rem;
         }
 
         nav a:hover {
-            color: #ffc107;
-        }
-
-        .mobile-menu {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
+            color: var(--accent-color);
         }
 
         .container {
@@ -98,39 +93,75 @@
             margin-top: 80px;
         }
 
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
             color: var(--white);
             padding: 4rem 20px;
             text-align: center;
-            margin-bottom: 3rem;
-            border-radius: 0 0 15px 15px;
+            border-bottom: 5px solid var(--accent-color);
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
+        .hero-content h1 {
+            font-size: 3rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1.3;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
             opacity: 0.95;
         }
 
+        .location-badge {
+            display: inline-block;
+            background-color: rgba(255, 193, 7, 0.9);
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .service-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .highlight {
+            text-align: center;
+        }
+
+        .highlight-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* CTA Button */
         .cta-button {
             display: inline-block;
-            background-color: #ffc107;
+            background-color: var(--accent-color);
             color: var(--dark);
-            padding: 12px 30px;
+            padding: 15px 40px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         .cta-button:hover {
@@ -139,128 +170,106 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-            margin-top: 2rem;
+        .cta-button.secondary {
+            background-color: var(--white);
+            color: var(--primary-color);
+            margin-top: 1rem;
         }
 
-        .hero-text {
-            text-align: left;
+        /* Services Section */
+        #services {
+            padding: 4rem 20px;
+            background: var(--white);
         }
 
-        .hero-image {
-            text-align: center;
-        }
-
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        section {
-            margin-bottom: 4rem;
-        }
-
-        section h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
+        #services h2 {
+            font-size: 2.5rem;
             color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 3rem;
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 1rem;
+            display: inline-block;
+            width: 100%;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-top: 3rem;
         }
 
         .service-card {
-            background: var(--white);
+            background: var(--light);
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
         }
 
         .service-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,160,210,0.2);
-        }
-
-        .service-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .service-card h3 {
-            color: var(--primary-color);
+            color: var(--secondary-color);
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,160,210,0.8);
             display: flex;
             align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            padding: 1rem;
-            text-align: center;
+            gap: 10px;
         }
 
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
+        .service-icon {
+            font-size: 2rem;
         }
 
-        .gallery-overlay p {
+        .service-card p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .service-card ul {
+            list-style-position: inside;
+            color: var(--gray);
+            line-height: 2;
+        }
+
+        .price-tag {
+            background: var(--success-color);
             color: var(--white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
             font-weight: bold;
-            font-size: 1.1rem;
+            margin-top: 1rem;
         }
 
-        .blog-grid {
+        /* Blog/Dicas Section */
+        #blog {
+            padding: 4rem 20px;
+            background: var(--light);
+        }
+
+        #blog h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1rem;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .blog-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
+            margin-top: 3rem;
         }
 
         .blog-card {
@@ -268,652 +277,424 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         .blog-image {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: var(--white);
+            object-fit: cover;
+            background-color: var(--light);
         }
 
         .blog-content {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .blog-content h3 {
+        .blog-category {
             color: var(--primary-color);
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
             margin-bottom: 0.5rem;
         }
 
-        .blog-meta {
+        .blog-card h3 {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .blog-card p {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 1rem;
+            flex-grow: 1;
         }
 
-        .blog-content p {
-            margin-bottom: 1rem;
-        }
-
-        .read-more {
-            color: var(--primary-color);
+        .blog-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
-            transition: color 0.3s;
+            text-align: center;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            align-self: flex-start;
         }
 
-        .read-more:hover {
+        .blog-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 4rem 20px;
+            background: var(--white);
+        }
+
+        #contact h2 {
+            font-size: 2.5rem;
             color: var(--secondary-color);
-        }
-
-        .contact-section {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-            color: var(--white);
-            padding: 3rem 2rem;
-            border-radius: 10px;
+            text-align: center;
             margin-bottom: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1rem;
+            display: inline-block;
+            width: 100%;
         }
 
         .contact-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .contact-info {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .contact-item {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 3px solid var(--primary-color);
         }
 
-        .contact-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .contact-info p {
-            margin: 0;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
+        .contact-item h3 {
+            color: var(--secondary-color);
             margin-bottom: 0.5rem;
+        }
+
+        .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
             font-weight: bold;
         }
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-family: inherit;
+        .contact-item a:hover {
+            text-decoration: underline;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .submit-button {
-            background-color: #ffc107;
-            color: var(--dark);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-
-        .submit-button:hover {
-            background-color: #ffb300;
-        }
-
+        /* Footer */
         footer {
             background-color: var(--dark);
             color: var(--white);
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 2rem 20px;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
+        .footer-links {
             margin-bottom: 1rem;
+        }
+
+        .footer-links a {
             color: var(--primary-color);
-        }
-
-        .footer-section p {
-            line-height: 1.8;
-        }
-
-        .social-links {
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 40px;
-            margin: 0 0.5rem;
             text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .social-links a:hover {
-            background-color: #ffc107;
-            color: var(--dark);
-        }
-
-        .rating {
-            color: #ffc107;
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .testimonial-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-top: 1rem;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            padding: 2rem;
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            margin: auto;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close {
-            color: var(--gray);
-            float: right;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
+            margin: 0 1rem;
             transition: color 0.3s;
         }
 
-        .close:hover {
-            color: var(--dark);
+        .footer-links a:hover {
+            color: var(--accent-color);
         }
 
-        .success-message {
-            display: none;
-            background-color: var(--success-color);
-            color: var(--white);
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                flex-direction: column;
-                background: var(--secondary-color);
-                padding: 1rem;
-                gap: 1rem;
-                width: 100%;
+            .hero-content h1 {
+                font-size: 2rem;
             }
 
-            nav.active {
-                display: flex;
+            .hero-content p {
+                font-size: 1.1rem;
             }
 
-            .mobile-menu {
-                display: block;
+            .service-highlights {
+                grid-template-columns: 1fr;
             }
 
-            .hero h1 {
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.9rem;
+            }
+
+            #services h2,
+            #blog h2,
+            #contact h2 {
                 font-size: 1.8rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            section h2 {
-                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header/Navigation -->
+    <!-- Header -->
     <header>
         <div class="header-container">
-            <div class="logo">
-                <span class="logo-icon">🔧</span>
-                <span>Tech Notebook</span>
-            </div>
-            <button class="mobile-menu" onclick="toggleMenu()">☰</button>
-            <nav id="nav-menu">
-                <a onclick="scrollToSection('home')">Home</a>
-                <a onclick="scrollToSection('services')">Serviços</a>
-                <a onclick="scrollToSection('gallery')">Galeria</a>
-                <a onclick="scrollToSection('blog')">Blog</a>
-                <a onclick="scrollToSection('contact')">Contato</a>
+            <a href="#" class="logo">
+                <span class="logo-icon">💻</span>
+                <span>Tech Notebooks</span>
+            </a>
+            <nav>
+                <a href="#services">Serviços</a>
+                <a href="#blog">Blog</a>
+                <a href="#contact">Contato</a>
             </nav>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="container">
-                <h1>🚀 Seu Notebook Merece Cuidado Profissional</h1>
-                <p>Especialistas em limpeza, manutenção e upgrade de notebooks com garantia de qualidade</p>
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <p style="text-align: left; font-size: 1rem; line-height: 1.8;">
-                            ✅ Limpeza profissional com remoção de poeira e resíduos<br>
-                            ✅ Troca de HD/SSD com transferência de dados<br>
-                            ✅ Upgrade de memória RAM para melhor desempenho<br>
-                            ✅ Troca de bateria original<br>
-                            ✅ Troca de pasta térmica profissional<br>
-                            ✅ Diagnóstico completo e laudo técnico
-                        </p>
-                        <button class="cta-button" onclick="scrollToSection('contact')">Solicitar Orçamento</button>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="location-badge">📍 Engenho de Dentro - Rio de Janeiro</div>
+                <h1>Seu Notebook Merece Cuidado Profissional</h1>
+                <p>Manutenção, Limpeza e Upgrades com Busca na Sua Residência</p>
+                
+                <div class="service-highlights">
+                    <div class="highlight">
+                        <div class="highlight-icon">🚗</div>
+                        <h3>Busca Grátis</h3>
+                        <p>Buscamos na sua residência</p>
                     </div>
-                    <div class="hero-image">
-                        <img src="https://user-gen-media-assets.s3.amazonaws.com/seedream_images/8b0925e2-938f-4992-b944-e37c47aa351c.png" alt="Serviço profissional de limpeza de notebooks">
+                    <div class="highlight">
+                        <div class="highlight-icon">⚙️</div>
+                        <h3>Profissional</h3>
+                        <p>Técnico experiente e qualificado</p>
+                    </div>
+                    <div class="highlight">
+                        <div class="highlight-icon">✅</div>
+                        <h3>Garantia</h3>
+                        <p>Garantia em todos os serviços</p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Services Section -->
-        <section id="services">
-            <div class="container">
-                <h2>Nossos Serviços</h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">🧹</div>
-                        <h3>Limpeza Profissional</h3>
-                        <p>Remoção completa de poeira, resíduos e sujeira dos componentes internos e externos. Aumenta a vida útil do seu equipamento.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">💾</div>
-                        <h3>Troca de HD/SSD</h3>
-                        <p>Instalação e configuração de disco rígido ou SSD. Transferência de dados segura com cópia de segurança completa.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🖥️</div>
-                        <h3>Upgrade de RAM</h3>
-                        <p>Aumento de memória para melhorar significativamente o desempenho e velocidade do seu notebook.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🔋</div>
-                        <h3>Troca de Bateria</h3>
-                        <p>Substituição de bateria original com garantia. Restaure a autonomia do seu notebook.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">❄️</div>
-                        <h3>Pasta Térmica</h3>
-                        <p>Aplicação de pasta térmica profissional para melhor refrigeração e redução de superaquecimento.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🔍</div>
-                        <h3>Diagnóstico Técnico</h3>
-                        <p>Análise completa com laudo detalhado. Identifique problemas antes que se tornem críticos.</p>
-                    </div>
+                <div style="margin-top: 2rem;">
+                    <a href="https://wa.me/5521992169554?text=Olá! Gostaria de agendar um serviço para meu notebook." class="cta-button">📱 Agendar Agora</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Gallery Section -->
-        <section id="gallery">
-            <div class="container">
-                <h2>Galeria de Serviços</h2>
-                <div class="gallery">
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #00a0d2, #004d73); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">🧹</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Limpeza profissional de componentes internos</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #004d73, #00a0d2); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">💾</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Instalação e configuração de SSD</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #00a0d2, #004d73); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">🖥️</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Upgrade de memória RAM</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #004d73, #00a0d2); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">🔋</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Substituição de bateria original</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #00a0d2, #004d73); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">❄️</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Aplicação de pasta térmica profissional</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div style="background: linear-gradient(135deg, #004d73, #00a0d2); width: 100%; height: 280px; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 4rem;">🔍</span>
-                        </div>
-                        <div class="gallery-overlay">
-                            <p>Diagnóstico técnico completo</p>
-                        </div>
-                    </div>
+    <!-- Areas de Atendimento -->
+    <section style="background: var(--light); padding: 3rem 20px; text-align: center; border-top: 2px solid var(--primary-color);">
+        <div class="container">
+            <h3 style="color: var(--secondary-color); font-size: 1.5rem; margin-bottom: 1rem;">🗺️ Áreas de Atendimento</h3>
+            <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 1rem;">Buscamos notebooks em sua residência nas seguintes regiões de Rio de Janeiro:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                <div style="background: var(--white); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-color);">
+                    <p style="font-weight: bold; color: var(--secondary-color); font-size: 1.1rem;">📍 Engenho de Dentro</p>
+                    <p style="color: var(--gray); font-size: 0.95rem;">Base Principal</p>
+                </div>
+                <div style="background: var(--white); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-color);">
+                    <p style="font-weight: bold; color: var(--secondary-color); font-size: 1.1rem;">🏔️ Tijuca</p>
+                    <p style="color: var(--gray); font-size: 0.95rem;">Região Montanhosa</p>
+                </div>
+                <div style="background: var(--white); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-color);">
+                    <p style="font-weight: bold; color: var(--secondary-color); font-size: 1.1rem;">🏖️ Zona Sul</p>
+                    <p style="color: var(--gray); font-size: 0.95rem;">Copacabana, Ipanema, Leblon</p>
+                </div>
+                <div style="background: var(--white); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-color);">
+                    <p style="font-weight: bold; color: var(--secondary-color); font-size: 1.1rem;">🏝️ Barra da Tijuca</p>
+                    <p style="color: var(--gray); font-size: 0.95rem;">Região da Barra</p>
+                </div>
+                <div style="background: var(--white); padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--primary-color);">
+                    <p style="font-weight: bold; color: var(--secondary-color); font-size: 1.1rem;">🌆 Zona Norte</p>
+                    <p style="color: var(--gray); font-size: 0.95rem;">São Gonçalo, Niterói</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Blog Section -->
-        <section id="blog">
-            <div class="container">
-                <h2>Blog - Dicas e Artigos</h2>
-                <div class="blog-grid">
-                    <div class="blog-card">
-                        <div class="blog-image">💡</div>
-                        <div class="blog-content">
-                            <h3>Como Manter seu Notebook Limpo</h3>
-                            <p class="blog-meta">Publicado em: em breve</p>
-                            <p>Dicas práticas para manter seu notebook limpo e funcionando por mais tempo. Saiba quais são os cuidados essenciais.</p>
-                            <a href="#" class="read-more">Leia mais →</a>
-                        </div>
-                    </div>
-                    <div class="blog-card">
-                        <div class="blog-image">⚡</div>
-                        <div class="blog-content">
-                            <h3>SSD vs HD: Qual escolher?</h3>
-                            <p class="blog-meta">Publicado em: em breve</p>
-                            <p>Entenda as diferenças entre SSD e HD tradicional. Veja qual é a melhor opção para seu notebook e orçamento.</p>
-                            <a href="#" class="read-more">Leia mais →</a>
-                        </div>
-                    </div>
-                    <div class="blog-card">
-                        <div class="blog-image">🚀</div>
-                        <div class="blog-content">
-                            <h3>Aumentar Performance do Notebook</h3>
-                            <p class="blog-meta">Publicado em: em breve</p>
-                            <p>Descubra os melhores upgrades para turbinar seu notebook. Melhore a velocidade e o desempenho significativamente.</p>
-                            <a href="#" class="read-more">Leia mais →</a>
-                        </div>
-                    </div>
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <h2>💼 Nossos Serviços</h2>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3><span class="service-icon">🧹</span> Limpeza Profissional</h3>
+                    <p>Limpeza completa interna e externa do notebook, removendo poeira acumulada e melhorando a ventilação.</p>
+                    <ul>
+                        <li>✓ Limpeza de dissipadores</li>
+                        <li>✓ Troca de pasta térmica</li>
+                        <li>✓ Reduz superaquecimento</li>
+                        <li>✓ Notebook mais silencioso</li>
+                    </ul>
+                    <span class="price-tag">R$ 100-200</span>
                 </div>
-            </div>
-        </section>
 
-        <!-- Testimonials -->
-        <section>
-            <div class="container">
-                <h2>O que Nossos Clientes Dizem</h2>
-                <div class="testimonials">
-                    <div class="testimonial-card">
-                        <div class="rating">⭐⭐⭐⭐⭐</div>
-                        <p>"Serviço excelente! Meu notebook ficou como novo após a limpeza profissional. Muito satisfeito com o atendimento."</p>
-                        <div class="testimonial-author">- João Silva</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="rating">⭐⭐⭐⭐⭐</div>
-                        <p>"A troca de SSD foi rápida e eficiente. Meu notebook está muito mais rápido agora. Super recomendo!"</p>
-                        <div class="testimonial-author">- Maria Santos</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="rating">⭐⭐⭐⭐⭐</div>
-                        <p>"Profissionais competentes, preço justo e resultado garantido. Voltarei com certeza para novos serviços."</p>
-                        <div class="testimonial-author">- Carlos Oliveira</div>
-                    </div>
+                <div class="service-card">
+                    <h3><span class="service-icon">⚡</span> Upgrade SSD</h3>
+                    <p>Substituição de HD por SSD. O upgrade que mais faz diferença na velocidade do seu notebook.</p>
+                    <ul>
+                        <li>✓ Inicialização 80% mais rápida</li>
+                        <li>✓ Programas abrem instantaneamente</li>
+                        <li>✓ Melhor bateria</li>
+                        <li>✓ Mais silencioso</li>
+                    </ul>
+                    <span class="price-tag">R$ 300-500</span>
                 </div>
-            </div>
-        </section>
 
-        <!-- Contact Section -->
-        <section id="contact">
-            <div class="container">
-                <h2>Entre em Contato</h2>
-                <div class="contact-section">
-                    <div class="contact-grid">
-                        <div>
-                            <h3>Informações de Contato</h3>
-                            <div class="contact-info">
-                                <div class="contact-icon">📞</div>
-                                <div>
-                                    <strong>Whatsapp/Celular:</strong>
-                                    <p><a href="https://wa.me/5521992169554" style="color: #ffc107; text-decoration: none;">+55 21 99417-0660</a></p>
-                                </div>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-icon">✉️</div>
-                                <div>
-                                    <strong>E-mail:</strong>
-                                    <p><a href="mailto:Jonathan.reis2000@hotmail.com" style="color: #ffc107; text-decoration: none;">Jonathan.reis2000@hotmail.com</a></p>
-                                </div>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-icon">📍</div>
-                                <div>
-                                    <strong>Localização:</strong>
-                                    <p>Duque de Caxias, Rio de Janeiro - RJ</p>
-                                </div>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-icon">⏰</div>
-                                <div>
-                                    <strong>Horário:</strong>
-                                    <p>Segunda a Sexta: 9h às 18h<br>Sábado: 9h às 13h</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h3>Envie-nos uma Mensagem</h3>
-                            <div class="success-message" id="successMessage">
-                                ✅ Mensagem enviada com sucesso! Entraremos em contato em breve.
-                            </div>
-                            <form onsubmit="handleSubmit(event)">
-                                <div class="form-group">
-                                    <label for="name">Nome Completo *</label>
-                                    <input type="text" id="name" name="name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">E-mail *</label>
-                                    <input type="email" id="email" name="email" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Telefone/Whatsapp *</label>
-                                    <input type="tel" id="phone" name="phone" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="service">Serviço de Interesse</label>
-                                    <input type="text" id="service" name="service" placeholder="Ex: Limpeza, Troca de HD...">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message">Mensagem *</label>
-                                    <textarea id="message" name="message" required></textarea>
-                                </div>
-                                <button type="submit" class="submit-button">Enviar Mensagem</button>
-                            </form>
-                        </div>
+                <div class="service-card">
+                    <h3><span class="service-icon">🧠</span> Upgrade RAM</h3>
+                    <p>Aumento de memória RAM para melhor multitarefa e desempenho em aplicações pesadas.</p>
+                    <ul>
+                        <li>✓ Mais abas do navegador</li>
+                        <li>✓ Menos travamentos</li>
+                        <li>✓ Melhor para design/games</li>
+                        <li>✓ 4GB → 8GB → 16GB</li>
+                    </ul>
+                    <span class="price-tag">R$ 150-400</span>
+                </div>
+
+                <div class="service-card">
+                    <h3><span class="service-icon">🔧</span> Diagnóstico</h3>
+                    <p>Avaliação completa do seu notebook para identificar problemas e recomendar melhores soluções.</p>
+                    <ul>
+                        <li>✓ Teste de hardware</li>
+                        <li>✓ Verificação de sistema</li>
+                        <li>✓ Plano de ação personalizado</li>
+                        <li>✓ Sem compromisso</li>
+                    </ul>
+                    <span class="price-tag">GRÁTIS</span>
+                </div>
+
+                <div class="service-card">
+                    <h3><span class="service-icon">🛡️</span> Segurança</h3>
+                    <p>Proteção contra malware, vírus e otimização do sistema para máximo desempenho seguro.</p>
+                    <ul>
+                        <li>✓ Remoção de malware</li>
+                        <li>✓ Antivírus instalado</li>
+                        <li>✓ Limpeza de programas desnecessários</li>
+                        <li>✓ Otimização de inicialização</li>
+                    </ul>
+                    <span class="price-tag">R$ 80-150</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog/Dicas Section -->
+    <section id="blog">
+        <div class="container">
+            <h2>📚 Blog e Dicas Úteis</h2>
+            
+            <div class="blog-container">
+                <div class="blog-card">
+                    <img src="https://user-gen-media-assets.s3.amazonaws.com/seedreamimages/a5e7e6ab-4f15-4ee2-8264-d0bf5ce3a0e5.png" alt="Como manter notebook limpo" class="blog-image">
+                    <div class="blog-content">
+                        <span class="blog-category">Manutenção</span>
+                        <h3>Como Manter seu Notebook Limpo</h3>
+                        <p>Descubra as melhores práticas para manter seu notebook limpo, com dicas de limpeza segura e rotina de manutenção preventiva.</p>
+                        <a href="blog-limpeza-notebook.html" class="blog-button">Saiba Mais →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <img src="https://user-gen-media-assets.s3.amazonaws.com/seedreamimages/36e72055-2ffe-4e85-bb01-73fc8dc5ecf0.png" alt="SSD vs HD comparação" class="blog-image">
+                    <div class="blog-content">
+                        <span class="blog-category">Upgrades</span>
+                        <h3>SSD vs HD: Qual Escolher?</h3>
+                        <p>Comparação detalhada entre SSD e HD. Veja as diferenças de velocidade, custo e qual é a melhor escolha para seu notebook.</p>
+                        <a href="blog-ssd-vs-hd.html" class="blog-button">Saiba Mais →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <img src="https://user-gen-media-assets.s3.amazonaws.com/seedreamimages/8b0925e2-938f-4992-b944-e37c47aa351c.png" alt="Aumentar performance notebook" class="blog-image">
+                    <div class="blog-content">
+                        <span class="blog-category">Performance</span>
+                        <h3>Como Aumentar Performance do Notebook</h3>
+                        <p>Guia completo sobre upgrades e otimizações para turbinar seu notebook. Descubra quais investimentos trazem maior resultado.</p>
+                        <a href="blog-aumentar-performance.html" class="blog-button">Saiba Mais →</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <img src="https://user-gen-media-assets.s3.amazonaws.com/seedreamimages/a5e7e6ab-4f15-4ee2-8264-d0bf5ce3a0e5.png" alt="Por que trocar pasta térmica" class="blog-image">
+                    <div class="blog-content">
+                        <span class="blog-category">Manutenção</span>
+                        <h3>Por Que Trocar a Pasta Térmica?</h3>
+                        <p>Entenda quando e por que sua pasta térmica precisa ser trocada, os sinais de degradação e como isso afeta a performance do seu notebook.</p>
+                        <a href="troca-pasta-termica.html" class="blog-button">Saiba Mais →</a>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2>📞 Entre em Contato</h2>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>📱 WhatsApp</h3>
+                    <p>Envie mensagem para agendar</p>
+                    <a href="https://wa.me/5521992169554?text=Olá! Gostaria de agendar um serviço de manutenção no meu notebook.">55 21 99417-0660</a>
+                </div>
+
+                <div class="contact-item">
+                    <h3>📧 Email</h3>
+                    <p>Envie suas dúvidas</p>
+                    <a href="mailto:contato@technotebook.com.br">contato@technotebook.com.br</a>
+                </div>
+
+                <div class="contact-item">
+                    <h3>📍 Localização</h3>
+                    <p>Região de Atendimento Base</p>
+                    <p style="color: var(--gray);">Engenho de Dentro, Rio de Janeiro - RJ</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%); color: var(--white); padding: 3rem 2rem; border-radius: 10px; text-align: center; margin-top: 3rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Pronto para Melhorar Seu Notebook?</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 2rem;">Faça um diagnóstico grátis agora mesmo!</p>
+                <a href="https://wa.me/5521992169554?text=Olá! Gostaria de um diagnóstico grátis do meu notebook." class="cta-button secondary">Diagnosticar Grátis</a>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Tech Notebook Services</h4>
-                    <p>Especialistas em manutenção e upgrade de notebooks com qualidade garantida e atendimento personalizado.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Serviços Rápidos</h4>
-                    <p>🧹 Limpeza Profissional<br>💾 Troca de HD/SSD<br>🖥️ Upgrade de RAM<br>🔋 Troca de Bateria</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Contato Direto</h4>
-                    <p>📱 <a href="https://wa.me/5521992169554" style="color: var(--primary-color); text-decoration: none;">+55 21 99417-0660</a><br>
-                    📧 <a href="mailto:Jonathan.reis2000@hotmail.com" style="color: var(--primary-color); text-decoration: none;">Jonathan.reis2000@hotmail.com</a></p>
-                    <div class="social-links">
-                        <a href="https://wa.me/5521992169554" title="Whatsapp">💬</a>
-                        <a href="mailto:Jonathan.reis2000@hotmail.com" title="Email">✉️</a>
-                    </div>
-                </div>
-            </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem;">
-                <p>&copy; 2026 Tech Notebook Services. Todos os direitos reservados. | Desenvolvido com ❤️ para Duque de Caxias, RJ</p>
-                <p style="font-size: 0.9rem; color: var(--gray);">Garantia em todos os serviços | Diagnóstico técnico gratuito</p>
-            </div>
+        <p>&copy; 2026 Tech Notebooks Services. Todos os direitos reservados.</p>
+        <div class="footer-links">
+            <a href="#services">Serviços</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contato</a>
         </div>
+        <p>Engenho de Dentro, Rio de Janeiro - RJ | 📱 <a href="https://wa.me/5521992169554" style="color: var(--primary-color);">55 21 99417-0660</a></p>
     </footer>
 
     <script>
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-                document.getElementById('nav-menu').classList.remove('active');
-            }
-        }
-
-        function toggleMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            navMenu.classList.toggle('active');
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const service = document.getElementById('service').value;
-            const message = document.getElementById('message').value;
-
-            // Constructing WhatsApp message
-            const whatsappMessage = `Olá! Meu nome é ${name}. Email: ${email}. Telefone: ${phone}. ${service ? `Serviço: ${service}. ` : ''}Mensagem: ${message}`;
-            const whatsappLink = `https://wa.me/5521992169554?text=${encodeURIComponent(whatsappMessage)}`;
-
-            // Show success message
-            const successMsg = document.getElementById('successMessage');
-            successMsg.style.display = 'block';
-
-            // Reset form
-            document.querySelector('form').reset();
-
-            // Redirect to WhatsApp after 2 seconds
-            setTimeout(() => {
-                window.open(whatsappLink, '_blank');
-                successMsg.style.display = 'none';
-            }, 2000);
-        }
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href.startsWith('#')) {
-                    e.preventDefault();
-                    const sectionId = href.substring(1);
-                    scrollToSection(sectionId);
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const nav = document.getElementById('nav-menu');
-            const menuBtn = document.querySelector('.mobile-menu');
-            if (!nav.contains(event.target) && !menuBtn.contains(event.target)) {
-                nav.classList.remove('active');
-            }
         });
     </script>
 </body>
