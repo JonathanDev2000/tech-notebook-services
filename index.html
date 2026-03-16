@@ -895,7 +895,7 @@
 
             <div class="review-form-wrapper">
                 <h3>Deixe sua avaliação</h3>
-                <form id="reviewForm" onsubmit="submitReview(event)">
+                <form id="reviewForm">
 
                     <div class="review-field">
                         <label for="reviewName">Seu nome</label>
@@ -1104,7 +1104,9 @@
         // Carrega avaliações ao abrir a página
         loadReviews();
 
+        // Registrar submit via addEventListener (necessário com type="module")
+        document.getElementById('reviewForm').addEventListener('submit', submitReview);
+
     </script>
 </body>
 </html>
- 
