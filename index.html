@@ -923,6 +923,12 @@
                         <textarea id="reviewComment" placeholder="Conte como foi sua experiência..." required></textarea>
                     </div>
 
+                    <!-- Honeypot anti-spam: bots costumam preencher esse campo escondido -->
+                    <div style="display:none;">
+                        <label for="reviewWebsite">Seu site</label>
+                        <input type="text" id="reviewWebsite" autocomplete="off">
+                    </div>
+
                     <button type="submit" class="btn-review-submit">Enviar avaliação</button>
                     <div class="review-success" id="reviewSuccess">✅ Avaliação enviada! Obrigado pelo feedback.</div>
                 </form>
@@ -934,6 +940,7 @@
                 <div class="reviews-loading" id="reviewsLoading">Carregando avaliações...</div>
                 <div class="reviews-cards-grid" id="reviewsCardsGrid"></div>
                 <p class="reviews-empty" id="reviewsEmpty" style="display:none;">Nenhuma avaliação ainda. Seja o primeiro! 😊</p>
+                <button type="button" id="reviewsLoadMore" class="btn-review-submit" style="margin-top:1.5rem; display:none; max-width:260px; margin-left:auto; margin-right:auto;">Carregar mais avaliações</button>
             </div>
         </div>
     </section>
@@ -1001,7 +1008,7 @@
         // FIREBASE CONFIG — substitua pelos seus dados
         // =============================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp }
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, limit, startAfter }
             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1017,6 +1024,9 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
+        const PAGE_SIZE = 20;
+        let lastVisible = null;
+        let isLoadingMore = false;
         // ---------- Renderizar cards ----------
         function renderCard(data) {
             const stars = '★'.repeat(data.stars) + '☆'.repeat(5 - data.stars);
@@ -1034,25 +1044,65 @@
                 </div>`;
         }
 
-        // ---------- Carregar avaliações ----------
-        async function loadReviews() {
-            const grid    = document.getElementById('reviewsCardsGrid');
-            const loading = document.getElementById('reviewsLoading');
-            const empty   = document.getElementById('reviewsEmpty');
+        // ---------- Carregar avaliações com paginação ----------
+        async function loadReviews(initial = false) {
+            const grid      = document.getElementById('reviewsCardsGrid');
+            const loading   = document.getElementById('reviewsLoading');
+            const empty     = document.getElementById('reviewsEmpty');
+            const loadMore  = document.getElementById('reviewsLoadMore');
+
+            if (isLoadingMore) return;
+            isLoadingMore = true;
+
             try {
-                const q    = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
-                const snap = await getDocs(q);
-                loading.style.display = 'none';
-                if (snap.empty) {
-                    empty.style.display = 'block';
+                if (initial) {
+                    grid.innerHTML = '';
+                    empty.style.display = 'none';
+                    loading.style.display = 'block';
+                    lastVisible = null;
+                    if (loadMore) loadMore.style.display = 'none';
+                }
+
+                const baseQuery = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+                let qFinal;
+                if (lastVisible) {
+                    qFinal = query(baseQuery, startAfter(lastVisible), limit(PAGE_SIZE));
                 } else {
-                    snap.forEach(doc => {
+                    qFinal = query(baseQuery, limit(PAGE_SIZE));
+                }
+
+                const snap = await getDocs(qFinal);
+                loading.style.display = 'none';
+
+                if (snap.empty && !lastVisible) {
+                    empty.style.display = 'block';
+                    if (loadMore) loadMore.style.display = 'none';
+                    isLoadingMore = false;
+                    return;
+                }
+
+                const docs = [];
+                snap.forEach(doc => docs.push(doc));
+
+                if (docs.length) {
+                    lastVisible = docs[docs.length - 1];
+                    docs.forEach(doc => {
                         grid.innerHTML += renderCard(doc.data());
                     });
+                }
+
+                if (loadMore) {
+                    if (docs.length === PAGE_SIZE) {
+                        loadMore.style.display = 'inline-block';
+                    } else {
+                        loadMore.style.display = 'none';
+                    }
                 }
             } catch (err) {
                 loading.textContent = 'Não foi possível carregar as avaliações.';
                 console.error(err);
+            } finally {
+                isLoadingMore = false;
             }
         }
 
@@ -1063,8 +1113,37 @@
             const stars   = document.querySelector('input[name="stars"]:checked');
             const comment = document.getElementById('reviewComment').value.trim();
 
+            // Honeypot: se o campo escondido estiver preenchido, provável bot
+            const websiteTrap = document.getElementById('reviewWebsite') ? document.getElementById('reviewWebsite').value.trim() : '';
+            if (websiteTrap) {
+                console.warn('Honeypot acionado, possível bot. Avaliação ignorada.');
+                return;
+            }
+
+            // Validações simples de conteúdo
+            if (name.length < 2) {
+                alert('Por favor, informe um nome válido.');
+                return;
+            }
+
+            if (comment.length < 10) {
+                alert('Conte um pouco mais sobre sua experiência (mínimo 10 caracteres).');
+                return;
+            }
+
             if (!stars) {
                 alert('Por favor, selecione uma nota de 1 a 5 estrelas.');
+                return;
+            }
+
+            // Rate limit: 1 avaliação a cada 2 minutos por navegador
+            const lastTs = localStorage.getItem('tn_lastReviewTs');
+            const now = Date.now();
+            const MIN_INTERVAL_MS = 2 * 60 * 1000;
+
+            if (lastTs && (now - Number(lastTs)) < MIN_INTERVAL_MS) {
+                const restante = Math.ceil((MIN_INTERVAL_MS - (now - Number(lastTs))) / 1000);
+                alert(`Você já enviou uma avaliação há pouco tempo. Tente novamente em ${restante} segundos.`);
                 return;
             }
 
@@ -1079,6 +1158,9 @@
                     comment,
                     createdAt: serverTimestamp()
                 });
+
+                // Registra horário do envio para rate limit
+                localStorage.setItem('tn_lastReviewTs', String(Date.now()));
 
                 // Adiciona o card no topo sem recarregar
                 const grid  = document.getElementById('reviewsCardsGrid');
@@ -1102,10 +1184,15 @@
         }
 
         // Carrega avaliações ao abrir a página
-        loadReviews();
+        loadReviews(true);
 
         // Registrar submit via addEventListener (necessário com type="module")
         document.getElementById('reviewForm').addEventListener('submit', submitReview);
+
+        const loadMoreBtn = document.getElementById('reviewsLoadMore');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => loadReviews(false));
+        }
 
     </script>
 </body>
