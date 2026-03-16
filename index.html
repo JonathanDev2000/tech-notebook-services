@@ -419,6 +419,208 @@
             text-decoration: underline;
         }
 
+
+        /* Reviews Section */
+        #reviews {
+            background: var(--white);
+            padding: 4rem 20px;
+        }
+
+        #reviews h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            color: var(--secondary-color);
+        }
+
+        .review-form-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--light);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .review-form-wrapper h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+
+        .review-field {
+            margin-bottom: 1.2rem;
+        }
+
+        .review-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .review-field input[type="text"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: var(--white);
+        }
+
+        .review-field input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: var(--accent-color);
+        }
+
+        .review-field textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+            background: var(--white);
+        }
+
+        .review-field textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-review-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-review-submit:hover {
+            opacity: 0.9;
+        }
+
+        .review-success {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            background: #d4edda;
+            border-radius: 8px;
+            color: var(--success-color);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+
+        /* Review Cards */
+        .reviews-list {
+            max-width: 800px;
+            margin: 2.5rem auto 0;
+        }
+
+        .reviews-list h3 {
+            text-align: center;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .reviews-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .review-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .review-card-name {
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+
+        .review-card-stars {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        .review-card-comment {
+            color: var(--dark);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .review-card-date {
+            font-size: 0.78rem;
+            color: var(--gray);
+            margin-top: 0.6rem;
+        }
+
+        .reviews-empty {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+            padding: 1.5rem 0;
+        }
+
+        .reviews-loading {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+            padding: 1rem 0;
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark);
@@ -685,6 +887,57 @@
         </div>
     </section>
 
+
+    <!-- Reviews Section -->
+    <section id="reviews">
+        <div class="container">
+            <h2>⭐ Avaliações</h2>
+
+            <div class="review-form-wrapper">
+                <h3>Deixe sua avaliação</h3>
+                <form id="reviewForm" onsubmit="submitReview(event)">
+
+                    <div class="review-field">
+                        <label for="reviewName">Seu nome</label>
+                        <input type="text" id="reviewName" placeholder="Ex: João Silva" required>
+                    </div>
+
+                    <div class="review-field">
+                        <label>Nota</label>
+                        <div class="star-rating">
+                            <input type="radio" name="stars" id="star5" value="5">
+                            <label for="star5" title="5 estrelas">★</label>
+                            <input type="radio" name="stars" id="star4" value="4">
+                            <label for="star4" title="4 estrelas">★</label>
+                            <input type="radio" name="stars" id="star3" value="3">
+                            <label for="star3" title="3 estrelas">★</label>
+                            <input type="radio" name="stars" id="star2" value="2">
+                            <label for="star2" title="2 estrelas">★</label>
+                            <input type="radio" name="stars" id="star1" value="1">
+                            <label for="star1" title="1 estrela">★</label>
+                        </div>
+                    </div>
+
+                    <div class="review-field">
+                        <label for="reviewComment">Comentário</label>
+                        <textarea id="reviewComment" placeholder="Conte como foi sua experiência..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-review-submit">Enviar avaliação</button>
+                    <div class="review-success" id="reviewSuccess">✅ Avaliação enviada! Obrigado pelo feedback.</div>
+                </form>
+            </div>
+
+            <!-- Cards de avaliações recebidas -->
+            <div class="reviews-list" id="reviewsList">
+                <h3>O que nossos clientes dizem</h3>
+                <div class="reviews-loading" id="reviewsLoading">Carregando avaliações...</div>
+                <div class="reviews-cards-grid" id="reviewsCardsGrid"></div>
+                <p class="reviews-empty" id="reviewsEmpty" style="display:none;">Nenhuma avaliação ainda. Seja o primeiro! 😊</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact">
         <div class="container">
@@ -729,7 +982,7 @@
         <p>Engenho de Dentro, Rio de Janeiro - RJ | 📱 <a href="https://wa.me/5521994170660" style="color: var(--primary-color);">55 21 99417-0660</a></p>
     </footer>
 
-    <script>
+    <script type="module">
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -743,6 +996,114 @@
                 }
             });
         });
+
+        // =============================================
+        // FIREBASE CONFIG — substitua pelos seus dados
+        // =============================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp }
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyA6xgR6P6rgaou1Ecwy0_wbHG2RYh1Z2wI",
+            authDomain:        "technotebooks-f617d.firebaseapp.com",
+            projectId:         "technotebooks-f617d",
+            storageBucket:     "technotebooks-f617d.firebasestorage.app",
+            messagingSenderId: "4099687329",
+            appId:             "1:4099687329:web:490eb224ddd93a4c5881e0",
+            measurementId:     "G-SH0E4X3FN2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        // ---------- Renderizar cards ----------
+        function renderCard(data) {
+            const stars = '★'.repeat(data.stars) + '☆'.repeat(5 - data.stars);
+            const date  = data.createdAt?.toDate
+                ? data.createdAt.toDate().toLocaleDateString('pt-BR')
+                : 'Recentemente';
+            return `
+                <div class="review-card">
+                    <div class="review-card-header">
+                        <span class="review-card-name">${data.name}</span>
+                        <span class="review-card-stars">${stars}</span>
+                    </div>
+                    <p class="review-card-comment">${data.comment}</p>
+                    <p class="review-card-date">${date}</p>
+                </div>`;
+        }
+
+        // ---------- Carregar avaliações ----------
+        async function loadReviews() {
+            const grid    = document.getElementById('reviewsCardsGrid');
+            const loading = document.getElementById('reviewsLoading');
+            const empty   = document.getElementById('reviewsEmpty');
+            try {
+                const q    = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+                const snap = await getDocs(q);
+                loading.style.display = 'none';
+                if (snap.empty) {
+                    empty.style.display = 'block';
+                } else {
+                    snap.forEach(doc => {
+                        grid.innerHTML += renderCard(doc.data());
+                    });
+                }
+            } catch (err) {
+                loading.textContent = 'Não foi possível carregar as avaliações.';
+                console.error(err);
+            }
+        }
+
+        // ---------- Enviar avaliação ----------
+        async function submitReview(e) {
+            e.preventDefault();
+            const name    = document.getElementById('reviewName').value.trim();
+            const stars   = document.querySelector('input[name="stars"]:checked');
+            const comment = document.getElementById('reviewComment').value.trim();
+
+            if (!stars) {
+                alert('Por favor, selecione uma nota de 1 a 5 estrelas.');
+                return;
+            }
+
+            const btn = e.target.querySelector('.btn-review-submit');
+            btn.disabled    = true;
+            btn.textContent = 'Enviando...';
+
+            try {
+                const docRef = await addDoc(collection(db, 'reviews'), {
+                    name,
+                    stars:     parseInt(stars.value),
+                    comment,
+                    createdAt: serverTimestamp()
+                });
+
+                // Adiciona o card no topo sem recarregar
+                const grid  = document.getElementById('reviewsCardsGrid');
+                const empty = document.getElementById('reviewsEmpty');
+                empty.style.display = 'none';
+                grid.innerHTML = renderCard({ name, stars: parseInt(stars.value), comment, createdAt: null })
+                               + grid.innerHTML;
+
+                document.getElementById('reviewForm').reset();
+                const successEl = document.getElementById('reviewSuccess');
+                successEl.style.display = 'block';
+                setTimeout(() => { successEl.style.display = 'none'; }, 4000);
+
+            } catch (err) {
+                alert('Erro ao enviar avaliação. Tente novamente.');
+                console.error(err);
+            } finally {
+                btn.disabled    = false;
+                btn.textContent = 'Enviar avaliação';
+            }
+        }
+
+        // Carrega avaliações ao abrir a página
+        loadReviews();
+
     </script>
 </body>
 </html>
