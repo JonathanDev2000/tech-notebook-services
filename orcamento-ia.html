@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Orçamento inteligente com IA - Technotebooks. Descreva o problema do seu notebook e receba um diagnóstico e orçamento instantâneo.">
+    <title>Orçamento com IA — Technotebooks</title>
+
+    <!-- jsPDF para gerar o PDF no navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-color: #00a0d2;
+            --secondary-color: #004d73;
+            --accent-color: #ffc107;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            text-decoration: none;
+        }
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+            margin-left: 2rem;
+        }
+        nav a:hover { color: var(--accent-color); }
+
+        /* ── HERO ── */
+        .hero-orcamento {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            padding: 6rem 20px 3rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-color);
+        }
+        .hero-orcamento h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero-orcamento p  { font-size: 1.15rem; opacity: .9; max-width: 600px; margin: 0 auto; }
+
+        /* ── MAIN CONTAINER ── */
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── STEPPER ── */
+        .stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            margin: 2.5rem auto 2rem;
+            max-width: 500px;
+        }
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative;
+        }
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #d0d0d0;
+            z-index: 0;
+        }
+        .step.done:not(:last-child)::after  { background: var(--success-color); }
+        .step.active:not(:last-child)::after { background: var(--primary-color); }
+        .step-circle {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: #d0d0d0;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: .9rem;
+            position: relative; z-index: 1;
+            transition: background .3s;
+        }
+        .step.active .step-circle  { background: var(--primary-color); }
+        .step.done   .step-circle  { background: var(--success-color); }
+        .step-label { font-size: .75rem; color: var(--gray); text-align: center; }
+        .step.active .step-label   { color: var(--primary-color); font-weight: 600; }
+        .step.done   .step-label   { color: var(--success-color); }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,.08);
+            margin-bottom: 1.5rem;
+        }
+        .card h2 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: .75rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* ── FORM ── */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: .4rem;
+            color: var(--dark);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color .3s;
+            background: var(--white);
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        /* sintoma chips */
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: .5rem; }
+        .chip {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            background: var(--white);
+            cursor: pointer;
+            font-size: .9rem;
+            transition: all .2s;
+            user-select: none;
+        }
+        .chip:hover  { border-color: var(--primary-color); color: var(--primary-color); }
+        .chip.active { border-color: var(--primary-color); background: var(--primary-color); color: #fff; }
+
+        /* ── BOTÕES ── */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            padding: 14px 36px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: inherit;
+            transition: opacity .3s, transform .2s;
+            width: 100%;
+        }
+        .btn-primary:hover:not(:disabled) { opacity: .9; transform: translateY(-2px); }
+        .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+        .btn-accent {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-color);
+            color: var(--dark);
+            padding: 13px 28px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            transition: all .2s;
+        }
+        .btn-accent:hover { background: #ffb300; transform: translateY(-2px); }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25d366;
+            color: #fff;
+            padding: 13px 28px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            text-decoration: none;
+            transition: all .2s;
+        }
+        .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+        .btn-outline {
+            display: inline-block;
+            background: transparent;
+            color: var(--primary-color);
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: 2px solid var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all .2s;
+        }
+        .btn-outline:hover { background: var(--primary-color); color: #fff; }
+
+        /* ── LOADING ── */
+        .loading-box {
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+        .loading-box p { color: var(--gray); margin-top: 1rem; font-size: 1rem; }
+        .spinner {
+            width: 52px; height: 52px;
+            border: 5px solid #e0e0e0;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── RESULTADO ── */
+        .result-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: .85rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .badge-alta  { background: #ffeaea; color: var(--danger-color); }
+        .badge-media { background: #fff7e0; color: #b8860b; }
+        .badge-baixa { background: #e6f7ed; color: var(--success-color); }
+
+        .diagnostico-section { margin-bottom: 1.5rem; }
+        .diagnostico-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: .6rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .diagnostico-section p,
+        .diagnostico-section ul { color: var(--gray); font-size: .97rem; line-height: 1.7; }
+        .diagnostico-section ul { padding-left: 1.2rem; }
+
+        .preco-box {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        .preco-box .preco-label { font-size: .9rem; opacity: .85; margin-bottom: .4rem; }
+        .preco-box .preco-valor { font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; }
+        .preco-box .preco-obs   { font-size: .8rem; opacity: .75; margin-top: .5rem; }
+
+        .aviso-box {
+            background: #fff7e0;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            font-size: .9rem;
+            color: #7a5c00;
+            margin-top: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 20px;
+            margin-top: 3rem;
+        }
+        .footer-links { margin-bottom: 1rem; }
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        .footer-links a:hover { color: var(--accent-color); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .hero-orcamento h1 { font-size: 1.8rem; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn-accent,
+            .action-buttons .btn-whatsapp,
+            .action-buttons .btn-outline { width: 100%; justify-content: center; }
+        }
+
+        /* ── SECTIONS VISIBILITY ── */
+        .section-step { display: none; }
+        .section-step.visible { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="header-container">
+        <a href="index.html" class="logo">
+            <span>💻</span>
+            <span>Technotebooks</span>
+        </a>
+        <nav>
+            <a href="index.html#services">Serviços</a>
+            <a href="index.html#blog">Blog</a>
+            <a href="index.html#reviews">⭐ Avaliações</a>
+            <a href="index.html#contact">Contato</a>
+        </nav>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="hero-orcamento">
+    <h1>🤖 Orçamento Inteligente com IA</h1>
+    <p>Descreva o problema do seu notebook e nossa IA faz o diagnóstico na hora — com estimativa de custo e PDF pronto para você.</p>
+</section>
+
+<!-- STEPPER -->
+<div class="container">
+    <div class="stepper" id="stepper">
+        <div class="step active" id="st1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Seu notebook</div>
+        </div>
+        <div class="step" id="st2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Diagnóstico</div>
+        </div>
+        <div class="step" id="st3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Orçamento</div>
+        </div>
+    </div>
+</div>
+
+<main style="padding: 0 0 3rem;">
+<div class="container">
+
+    <!-- ═══ STEP 1 — Formulário ═══ -->
+    <div class="section-step visible" id="step1">
+        <div class="card">
+            <h2>📋 Dados do Notebook e do Problema</h2>
+
+            <div class="form-group">
+                <label for="clientName">Seu nome</label>
+                <input type="text" id="clientName" placeholder="Ex: Maria Silva">
+            </div>
+
+            <div class="form-group">
+                <label for="notebookMarca">Marca do notebook</label>
+                <select id="notebookMarca">
+                    <option value="">Selecione a marca...</option>
+                    <option>Dell</option>
+                    <option>Lenovo</option>
+                    <option>HP</option>
+                    <option>Acer</option>
+                    <option>Asus</option>
+                    <option>Samsung</option>
+                    <option>Apple (MacBook)</option>
+                    <option>Positivo</option>
+                    <option>Outra</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="notebookModelo">Modelo / série (opcional)</label>
+                <input type="text" id="notebookModelo" placeholder="Ex: Inspiron 15, IdeaPad 3...">
+            </div>
+
+            <div class="form-group">
+                <label for="notebookIdade">Idade aproximada do notebook</label>
+                <select id="notebookIdade">
+                    <option value="">Selecione...</option>
+                    <option>Menos de 1 ano</option>
+                    <option>1 a 3 anos</option>
+                    <option>3 a 5 anos</option>
+                    <option>Mais de 5 anos</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Sintomas principais (selecione os que se aplicam)</label>
+                <div class="chips" id="chipsContainer">
+                    <span class="chip" data-val="superaquecimento / ventoinhas barulhentas">🌡️ Superaquecimento</span>
+                    <span class="chip" data-val="muito lento / travando">🐌 Muito lento</span>
+                    <span class="chip" data-val="tela com defeito ou manchas">🖥️ Problema na tela</span>
+                    <span class="chip" data-val="bateria não carrega ou dura pouco">🔋 Bateria fraca</span>
+                    <span class="chip" data-val="não liga / desliga sozinho">⚡ Não liga</span>
+                    <span class="chip" data-val="teclado ou touchpad com defeito">⌨️ Teclado/touchpad</span>
+                    <span class="chip" data-val="HD ou SSD com barulho ou lentidão">💾 HD/SSD com problema</span>
+                    <span class="chip" data-val="vírus ou malware">🦠 Vírus/malware</span>
+                    <span class="chip" data-val="barulho estranho ao funcionar">🔊 Barulho estranho</span>
+                    <span class="chip" data-val="queda ou dano físico">💥 Dano físico</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descProblema">Descreva o problema com mais detalhes</label>
+                <textarea id="descProblema" placeholder="Ex: Meu notebook começa a travar bastante após 15 minutos de uso e fica muito quente. Já formatei mas o problema persiste..."></textarea>
+            </div>
+
+            <button class="btn-primary" id="btnAnalisar" onclick="analisarProblema()">
+                🤖 Analisar com IA
+            </button>
+        </div>
+    </div>
+
+    <!-- ═══ STEP 2 — Loading ═══ -->
+    <div class="section-step" id="step2">
+        <div class="card">
+            <div class="loading-box">
+                <div class="spinner"></div>
+                <p id="loadingMsg">Analisando o problema do seu notebook...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ STEP 3 — Resultado ═══ -->
+    <div class="section-step" id="step3">
+        <div class="card" id="resultCard">
+            <h2>🔍 Diagnóstico e Orçamento</h2>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-links">
+        <a href="index.html#services">Serviços</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="index.html#contact">Contato</a>
+    </div>
+    <p>&copy; 2026 Technotebooks. Todos os direitos reservados.</p>
+    <p>Engenho de Dentro, Rio de Janeiro - RJ | 📱 <a href="https://wa.me/5521994170660" style="color: var(--primary-color);">55 21 99417-0660</a></p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════
+//  CONFIGURAÇÃO — coloque sua chave do Gemini aqui
+//  Pegue em: aistudio.google.com → Get API Key
+//  LEMBRETE: remova a chave antes de fazer commit!
+// ════════════════════════════════════════════
+const GEMINI_API_KEY = 'SUA_CHAVE_AQUI'; // ← substitua pela sua chave do Google AI Studio
+
+// ════════════════════════════════════════════
+//  ESTADO
+// ════════════════════════════════════════════
+let dadosOrcamento = {};
+
+// ════════════════════════════════════════════
+//  CHIPS
+// ════════════════════════════════════════════
+document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => chip.classList.toggle('active'));
+});
+
+function getChipsSelecionados() {
+    return [...document.querySelectorAll('.chip.active')]
+        .map(c => c.dataset.val).join(', ');
+}
+
+// ════════════════════════════════════════════
+//  STEPPER
+// ════════════════════════════════════════════
+function setStep(n) {
+    ['step1','step2','step3'].forEach((id, i) => {
+        document.getElementById(id).classList.toggle('visible', i + 1 === n);
+    });
+    [1,2,3].forEach(i => {
+        const el = document.getElementById('st' + i);
+        el.classList.remove('active','done');
+        if (i < n)  el.classList.add('done');
+        if (i === n) el.classList.add('active');
+    });
+}
+
+// ════════════════════════════════════════════
+//  MENSAGENS DE LOADING ANIMADAS
+// ════════════════════════════════════════════
+const loadingMsgs = [
+    'Analisando o problema do seu notebook...',
+    'Cruzando sintomas com base de dados técnicos...',
+    'Estimando peças e serviços necessários...',
+    'Preparando seu diagnóstico personalizado...'
+];
+let loadingInterval;
+function startLoadingAnimation() {
+    let i = 0;
+    const el = document.getElementById('loadingMsg');
+    el.textContent = loadingMsgs[0];
+    loadingInterval = setInterval(() => {
+        i = (i + 1) % loadingMsgs.length;
+        el.textContent = loadingMsgs[i];
+    }, 2000);
+}
+function stopLoadingAnimation() {
+    clearInterval(loadingInterval);
+}
+
+// ════════════════════════════════════════════
+//  CHAMAR A IA
+// ════════════════════════════════════════════
+async function analisarProblema() {
+    const nome    = document.getElementById('clientName').value.trim();
+    const marca   = document.getElementById('notebookMarca').value;
+    const modelo  = document.getElementById('notebookModelo').value.trim();
+    const idade   = document.getElementById('notebookIdade').value;
+    const chips   = getChipsSelecionados();
+    const desc    = document.getElementById('descProblema').value.trim();
+
+    if (!marca || !idade || !desc) {
+        alert('Por favor, preencha a marca, a idade do notebook e a descrição do problema.');
+        return;
+    }
+
+    // Salvar dados para o PDF
+    dadosOrcamento = { nome, marca, modelo, idade, chips, desc };
+
+    setStep(2);
+    startLoadingAnimation();
+
+    const prompt = `Você é um técnico especialista em notebooks da Technotebooks, empresa de manutenção em Rio de Janeiro (RJ).
+
+Com base nas informações abaixo, faça um DIAGNÓSTICO TÉCNICO COMPLETO e gere um ORÇAMENTO ESTIMADO em reais.
+
+=== DADOS DO NOTEBOOK ===
+Marca: ${marca}
+Modelo/Série: ${modelo || 'Não informado'}
+Idade: ${idade}
+Sintomas selecionados: ${chips || 'Nenhum selecionado'}
+Descrição do problema: ${desc}
+
+=== FORMATO DE RESPOSTA (responda APENAS este JSON, sem markdown, sem texto antes ou depois) ===
+{
+  "diagnostico_resumo": "Resumo curto do provável diagnóstico em 1-2 frases",
+  "causa_provavel": "Explicação técnica da causa mais provável",
+  "servicos_necessarios": ["serviço 1", "serviço 2"],
+  "pecas_possiveis": ["peça 1", "peça 2"],
+  "preco_minimo": 150,
+  "preco_maximo": 400,
+  "prazo_estimado": "1 a 3 dias úteis",
+  "urgencia": "alta|media|baixa",
+  "observacoes": "Observações importantes para o cliente",
+  "dica_prevencao": "Dica de como evitar o problema no futuro"
+}`;
+
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.3 }
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err?.error?.message || 'Erro na API: ' + response.status);
+        }
+
+        const data    = await response.json();
+        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const clean   = rawText.replace(/```json|```/g, '').trim();
+        const result  = JSON.parse(clean);
+
+        stopLoadingAnimation();
+        dadosOrcamento.result = result;
+        renderResultado(result);
+        setStep(3);
+
+    } catch (err) {
+        stopLoadingAnimation();
+        console.error(err);
+        alert('Erro ao processar o diagnóstico. Verifique sua conexão ou a chave da API e tente novamente.');
+        setStep(1);
+    }
+}
+
+// ════════════════════════════════════════════
+//  RENDERIZAR RESULTADO
+// ════════════════════════════════════════════
+function renderResultado(r) {
+    const urgenciaClass = { alta: 'badge-alta', media: 'badge-media', baixa: 'badge-baixa' }[r.urgencia] || 'badge-media';
+    const urgenciaLabel = { alta: '🔴 Urgência Alta', media: '🟡 Urgência Média', baixa: '🟢 Urgência Baixa' }[r.urgencia] || '';
+
+    const servicos = r.servicos_necessarios.map(s => `<li>${s}</li>`).join('');
+    const pecas    = r.pecas_possiveis.length
+        ? r.pecas_possiveis.map(p => `<li>${p}</li>`).join('')
+        : '<li>Nenhuma peça de reposição identificada</li>';
+
+    const waMsg = encodeURIComponent(
+        `Olá! Acabei de fazer o orçamento pelo site e recebi este diagnóstico:\n\n` +
+        `📱 Notebook: ${dadosOrcamento.marca} ${dadosOrcamento.modelo || ''}\n` +
+        `🔍 Diagnóstico: ${r.diagnostico_resumo}\n` +
+        `💰 Estimativa: R$ ${r.preco_minimo} – R$ ${r.preco_maximo}\n\n` +
+        `Gostaria de agendar um atendimento!`
+    );
+
+    document.getElementById('resultContent').innerHTML = `
+        <span class="result-badge ${urgenciaClass}">${urgenciaLabel}</span>
+
+        <div class="diagnostico-section">
+            <h3>🔍 Diagnóstico</h3>
+            <p>${r.diagnostico_resumo}</p>
+        </div>
+
+        <div class="diagnostico-section">
+            <h3>⚙️ Causa Provável</h3>
+            <p>${r.causa_provavel}</p>
+        </div>
+
+        <div class="diagnostico-section">
+            <h3>🛠️ Serviços Necessários</h3>
+            <ul>${servicos}</ul>
+        </div>
+
+        <div class="diagnostico-section">
+            <h3>📦 Possíveis Peças</h3>
+            <ul>${pecas}</ul>
+        </div>
+
+        <div class="preco-box">
+            <div class="preco-label">Estimativa de Custo</div>
+            <div class="preco-valor">R$ ${r.preco_minimo} – R$ ${r.preco_maximo}</div>
+            <div class="preco-obs">⏱️ Prazo estimado: ${r.prazo_estimado}</div>
+        </div>
+
+        ${r.observacoes ? `
+        <div class="diagnostico-section">
+            <h3>📌 Observações</h3>
+            <p>${r.observacoes}</p>
+        </div>` : ''}
+
+        ${r.dica_prevencao ? `
+        <div class="diagnostico-section">
+            <h3>💡 Dica de Prevenção</h3>
+            <p>${r.dica_prevencao}</p>
+        </div>` : ''}
+
+        <div class="aviso-box">
+            ⚠️ Este orçamento é uma <strong>estimativa gerada por IA</strong> com base nas informações fornecidas. O valor final pode variar após avaliação presencial do técnico.
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-accent" onclick="gerarPDF()">
+                📄 Baixar Orçamento em PDF
+            </button>
+            <a class="btn-whatsapp" href="https://wa.me/5521994170660?text=${waMsg}" target="_blank">
+                💬 Confirmar via WhatsApp
+            </a>
+            <button class="btn-outline" onclick="novoOrcamento()">
+                🔄 Novo Orçamento
+            </button>
+        </div>
+    `;
+}
+
+// ════════════════════════════════════════════
+//  GERAR PDF
+// ════════════════════════════════════════════
+function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const r   = dadosOrcamento.result;
+    const d   = dadosOrcamento;
+
+    const azul  = [0, 77, 115];
+    const cyan  = [0, 160, 210];
+    const cinza = [100, 100, 100];
+    const branco = [255, 255, 255];
+
+    // ── Cabeçalho ──
+    doc.setFillColor(...azul);
+    doc.rect(0, 0, 210, 38, 'F');
+    doc.setFillColor(...cyan);
+    doc.rect(0, 35, 210, 3, 'F');
+
+    doc.setTextColor(...branco);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('💻 Technotebooks', 20, 16);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Manutenção e Upgrades de Notebooks — Rio de Janeiro, RJ', 20, 24);
+    doc.text('technotebooks.com.br  |  (21) 99417-0660', 20, 31);
+
+    // ── Título do orçamento ──
+    doc.setTextColor(...azul);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ORÇAMENTO TÉCNICO ESTIMADO', 20, 50);
+
+    doc.setDrawColor(...cyan);
+    doc.setLineWidth(.5);
+    doc.line(20, 53, 190, 53);
+
+    // ── Data e número ──
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    const num  = Math.floor(Math.random() * 90000) + 10000;
+    doc.setFontSize(9);
+    doc.setTextColor(...cinza);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Nº ${num}   |   Gerado em ${hoje}`, 20, 59);
+
+    // ── Dados do cliente ──
+    let y = 70;
+    function secTitle(txt) {
+        doc.setFillColor(...azul);
+        doc.rect(20, y - 5, 170, 8, 'F');
+        doc.setTextColor(...branco);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(txt, 23, y + .5);
+        y += 10;
+    }
+    function row(label, val) {
+        doc.setTextColor(...cinza);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(label, 23, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(30, 30, 30);
+        const lines = doc.splitTextToSize(val || '—', 130);
+        doc.text(lines, 75, y);
+        y += (lines.length * 5) + 1;
+    }
+
+    secTitle('DADOS DO CLIENTE E EQUIPAMENTO');
+    row('Nome:', d.nome || 'Não informado');
+    row('Notebook:', `${d.marca} ${d.modelo || ''}`);
+    row('Idade:', d.idade);
+    row('Sintomas:', d.chips || 'Nenhum selecionado');
+    row('Descrição:', d.desc);
+
+    y += 4;
+    secTitle('DIAGNÓSTICO DA IA');
+    row('Resumo:', r.diagnostico_resumo);
+    row('Causa provável:', r.causa_provavel);
+
+    y += 2;
+    doc.setFontSize(9);
+    doc.setTextColor(...cinza);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Serviços necessários:', 23, y);
+    y += 5;
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 30, 30);
+    r.servicos_necessarios.forEach(s => {
+        doc.text(`• ${s}`, 27, y);
+        y += 5;
+    });
+
+    if (r.pecas_possiveis?.length) {
+        y += 2;
+        doc.setTextColor(...cinza);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Possíveis peças:', 23, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(30, 30, 30);
+        r.pecas_possiveis.forEach(p => {
+            doc.text(`• ${p}`, 27, y);
+            y += 5;
+        });
+    }
+
+    // ── Box de preço ──
+    y += 4;
+    doc.setFillColor(...azul);
+    doc.roundedRect(20, y, 170, 28, 4, 4, 'F');
+    doc.setTextColor(...branco);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('ESTIMATIVA DE CUSTO', 105, y + 8, { align: 'center' });
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`R$ ${r.preco_minimo} – R$ ${r.preco_maximo}`, 105, y + 18, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Prazo estimado: ${r.prazo_estimado}`, 105, y + 25, { align: 'center' });
+    y += 34;
+
+    // ── Observações ──
+    if (r.observacoes) {
+        row('Observações:', r.observacoes);
+    }
+    if (r.dica_prevencao) {
+        row('Dica de prevenção:', r.dica_prevencao);
+    }
+
+    // ── Rodapé de aviso ──
+    y += 6;
+    doc.setFillColor(255, 247, 224);
+    doc.rect(20, y, 170, 14, 'F');
+    doc.setTextColor(120, 80, 0);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'italic');
+    const aviso = doc.splitTextToSize(
+        '⚠️ Este orçamento é uma estimativa gerada por inteligência artificial com base nas informações fornecidas. O valor final pode variar após avaliação presencial do técnico.',
+        162
+    );
+    doc.text(aviso, 23, y + 5);
+
+    // ── Rodapé final ──
+    doc.setFillColor(...azul);
+    doc.rect(0, 277, 210, 20, 'F');
+    doc.setTextColor(...branco);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Technotebooks — Engenho de Dentro, Rio de Janeiro, RJ', 105, 284, { align: 'center' });
+    doc.text('technotebooks.com.br  |  (21) 99417-0660  |  technotebooks01@gmail.com', 105, 291, { align: 'center' });
+
+    const filename = `orcamento-technotebooks-${num}.pdf`;
+    doc.save(filename);
+}
+
+// ════════════════════════════════════════════
+//  NOVO ORÇAMENTO
+// ════════════════════════════════════════════
+function novoOrcamento() {
+    document.getElementById('clientName').value   = '';
+    document.getElementById('notebookMarca').value = '';
+    document.getElementById('notebookModelo').value = '';
+    document.getElementById('notebookIdade').value  = '';
+    document.getElementById('descProblema').value   = '';
+    document.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
+    dadosOrcamento = {};
+    setStep(1);
+}
+</script>
+</body>
+</html>
