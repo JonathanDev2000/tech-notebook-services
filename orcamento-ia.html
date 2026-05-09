@@ -592,6 +592,43 @@ async function analisarProblema() {
 
 Com base nas informações abaixo, faça um DIAGNÓSTICO TÉCNICO COMPLETO e gere um ORÇAMENTO ESTIMADO em reais.
 
+=== TABELA INTERNA DE PREÇOS DE REFERÊNCIA (use para calcular a estimativa — NÃO mencione estes valores diretamente ao cliente) ===
+PEÇAS:
+- Pasta térmica (aplicação): R$ 15 a R$ 30
+- Tela notebook 14" LED: R$ 180 a R$ 350
+- Tela notebook 15.6" LED: R$ 200 a R$ 400
+- Tela notebook Full HD IPS: R$ 300 a R$ 550
+- Bateria (genérica): R$ 120 a R$ 220
+- Bateria (original): R$ 250 a R$ 500
+- HD 1TB: R$ 180 a R$ 280
+- SSD 240GB: R$ 120 a R$ 200
+- SSD 480GB: R$ 200 a R$ 320
+- SSD 1TB: R$ 320 a R$ 500
+- Memória RAM 8GB DDR4: R$ 120 a R$ 200
+- Memória RAM 16GB DDR4: R$ 220 a R$ 380
+- Teclado (genérico): R$ 80 a R$ 180
+- Teclado (original): R$ 180 a R$ 350
+- Cooler/ventoinha interna: R$ 60 a R$ 150
+- Carregador/fonte (genérico): R$ 80 a R$ 160
+- Carregador/fonte (original): R$ 200 a R$ 400
+- Placa de vídeo dedicada (reparo): R$ 250 a R$ 600
+- Placa-mãe (reparo de solda/BGA): R$ 300 a R$ 700
+- Alto-falante: R$ 40 a R$ 100
+- Conector de carga (DC Jack): R$ 30 a R$ 80
+
+SERVIÇOS (mão de obra):
+- Limpeza interna completa: R$ 80 a R$ 150
+- Formatação + instalação Windows: R$ 80 a R$ 150
+- Remoção de vírus/malware: R$ 80 a R$ 120
+- Substituição de tela: R$ 80 a R$ 150 (mão de obra)
+- Substituição de bateria: R$ 50 a R$ 100 (mão de obra)
+- Substituição de HD/SSD: R$ 50 a R$ 80 (mão de obra)
+- Substituição de teclado: R$ 60 a R$ 100 (mão de obra)
+- Diagnóstico geral: R$ 50 a R$ 80
+- Reparo de solda/BGA: R$ 200 a R$ 500
+
+Use esses valores como base para calcular preco_minimo e preco_maximo somando peças + mão de obra dos itens identificados no diagnóstico. Considere sempre uma margem de variação realista.
+
 === DADOS DO NOTEBOOK ===
 Marca: ${marca}
 Modelo/Série: ${modelo || 'Não informado'}
